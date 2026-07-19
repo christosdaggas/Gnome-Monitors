@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3584e4"/>
+      <stop offset="1" stop-color="#1c5fc4"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e8eefc"/>
+    </linearGradient>
+    <linearGradient id="screenBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe0fb"/>
+      <stop offset="1" stop-color="#a8c6f5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App background: Adwaita-style rounded square -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="none"
+        stroke="#ffffff" stroke-opacity="0.12" stroke-width="2"/>
+
+  <!-- Mirror group: two overlapping screens sharing one frame -->
+  <g>
+    <!-- Back (mirrored) screen -->
+    <rect x="128" y="150" width="196" height="128" rx="16" fill="url(#screenBack)"/>
+    <!-- Front (main) screen of the mirror group -->
+    <rect x="180" y="182" width="196" height="128" rx="16" fill="url(#screen)"/>
+    <rect x="180" y="182" width="196" height="128" rx="16" fill="none"
+          stroke="#1c5fc4" stroke-opacity="0.18" stroke-width="3"/>
+    <!-- Mirror glyph: two triangles reflected across a centre line -->
+    <g fill="#3584e4" opacity="0.9">
+      <path d="M258 224 L258 268 L228 246 Z"/>
+      <path d="M298 224 L298 268 L328 246 Z"/>
+    </g>
+    <line x1="278" y1="216" x2="278" y2="276" stroke="#3584e4"
+          stroke-width="6" stroke-linecap="round" stroke-dasharray="10 10" opacity="0.55"/>
+    <!-- Shared stand for the group -->
+    <rect x="262" y="310" width="32" height="34" fill="#dbe6fb"/>
+    <rect x="224" y="342" width="108" height="18" rx="9" fill="#dbe6fb"/>
+  </g>
+
+  <!-- Independent extended monitor, set apart to the right -->
+  <g transform="translate(6,0)">
+    <rect x="356" y="228" width="120" height="86" rx="14" fill="url(#screen)"/>
+    <rect x="356" y="228" width="120" height="86" rx="14" fill="none"
+          stroke="#1c5fc4" stroke-opacity="0.18" stroke-width="3"/>
+    <rect x="404" y="314" width="24" height="24" fill="#dbe6fb"/>
+    <rect x="380" y="338" width="72" height="16" rx="8" fill="#dbe6fb"/>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.chrisdaggas.MonitorLayout</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Monitor Layout</name>
+  <summary>Arrange displays and mirror groups on GNOME</summary>
+  <description>
+    <p>
+      Monitor Layout is a visual display manager for GNOME on Wayland. It
+      talks directly to Mutter's DisplayConfig D-Bus interface — the same
+      mechanism GNOME Settings uses — and adds capabilities the built-in
+      panel does not offer, most importantly partial mirroring: two displays
+      can form one mirror group while a third remains an independent
+      extended display. This is ideal for KVM-over-IP setups where a remote
+      console should mirror the main monitor.
+    </p>
+    <ul>
+      <li>Drag-and-drop layout editor with edge snapping and live validation</li>
+      <li>Partial mirroring: mirror any subset of displays, keep the rest extended</li>
+      <li>Resolution, refresh rate, scaling (including fractional), rotation, primary display</li>
+      <li>Named profiles matched by stable EDID identity, not connector names</li>
+      <li>Safe applies: GNOME's standard keep-or-revert confirmation, plus a crash-proof rollback watchdog for previews</li>
+      <li>KVM display detection with user-editable friendly names</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">com.chrisdaggas.MonitorLayout.desktop</launchable>
+  <developer id="com.chrisdaggas">
+    <name>Christos A. Daggas</name>
+  </developer>
+  <url type="homepage">https://github.com/christosdaggas/Gnome-Monitors</url>
+  <url type="vcs-browser">https://github.com/christosdaggas/Gnome-Monitors</url>
+  <content_rating type="oars-1.1"/>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+  <categories>
+    <category>Settings</category>
+    <category>HardwareSettings</category>
+  </categories>
+  <releases>
+    <release version="0.1.0" date="2026-07-19">
+      <description>
+        <p>Initial release: visual layout editor, partial mirroring, profiles, safe apply and rollback.</p>
+      </description>
+    </release>
+  </releases>
+</component>

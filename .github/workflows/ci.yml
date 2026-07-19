@@ -23,8 +23,8 @@ jobs:
         run: cargo build --release --locked --workspace
       - name: Validate desktop file and AppStream metadata
         run: |
-          desktop-file-validate data/desktop/gr.hotwebdesign.MonitorLayout.desktop
-          appstreamcli validate data/metainfo/gr.hotwebdesign.MonitorLayout.metainfo.xml
+          desktop-file-validate data/desktop/com.chrisdaggas.MonitorLayout.desktop
+          appstreamcli validate data/metainfo/com.chrisdaggas.MonitorLayout.metainfo.xml
 
   rpm:
     runs-on: ubuntu-latest

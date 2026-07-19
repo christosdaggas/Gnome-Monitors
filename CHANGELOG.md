@@ -2,7 +2,8 @@
 
 ## 0.1.0 — 2026-07-19
 
-Initial release.
+Initial release. Application ID `com.chrisdaggas.MonitorLayout`; original
+app icon (a mirror group beside an extended display).
 
 * Visual layout editor (drag + snap + settle, keyboard nudging, live
   validation) for GNOME Wayland via `org.gnome.Mutter.DisplayConfig`.

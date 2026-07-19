@@ -13,7 +13,7 @@ Version:        0.1.0
 Release:        1%{?dist}
 Summary:        Visual display layout manager for GNOME with partial mirroring
 License:        GPL-3.0-or-later
-URL:            https://hotwebdesign.gr/
+URL:            https://github.com/christosdaggas/Gnome-Monitors
 Source0:        %{name}-%{version}.tar.gz
 # Created with: cargo vendor (see packaging/build-rpm.sh)
 Source1:        %{name}-%{version}-vendor.tar.xz
@@ -59,16 +59,16 @@ cargo build --release --offline --locked --workspace
 install -Dm755 target/release/monitor-layout %{buildroot}%{_bindir}/monitor-layout
 install -Dm755 target/release/monitor-layout-revert-helper %{buildroot}%{_bindir}/monitor-layout-revert-helper
 install -Dm755 target/release/monitor-layout-ctl %{buildroot}%{_bindir}/monitor-layout-ctl
-install -Dm644 data/desktop/gr.hotwebdesign.MonitorLayout.desktop \
-    %{buildroot}%{_datadir}/applications/gr.hotwebdesign.MonitorLayout.desktop
-install -Dm644 data/metainfo/gr.hotwebdesign.MonitorLayout.metainfo.xml \
-    %{buildroot}%{_metainfodir}/gr.hotwebdesign.MonitorLayout.metainfo.xml
-install -Dm644 data/icons/hicolor/scalable/apps/gr.hotwebdesign.MonitorLayout.svg \
-    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/gr.hotwebdesign.MonitorLayout.svg
+install -Dm644 data/desktop/com.chrisdaggas.MonitorLayout.desktop \
+    %{buildroot}%{_datadir}/applications/com.chrisdaggas.MonitorLayout.desktop
+install -Dm644 data/metainfo/com.chrisdaggas.MonitorLayout.metainfo.xml \
+    %{buildroot}%{_metainfodir}/com.chrisdaggas.MonitorLayout.metainfo.xml
+install -Dm644 data/icons/hicolor/scalable/apps/com.chrisdaggas.MonitorLayout.svg \
+    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/com.chrisdaggas.MonitorLayout.svg
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/gr.hotwebdesign.MonitorLayout.desktop
-appstreamcli validate --no-net %{buildroot}%{_metainfodir}/gr.hotwebdesign.MonitorLayout.metainfo.xml
+desktop-file-validate %{buildroot}%{_datadir}/applications/com.chrisdaggas.MonitorLayout.desktop
+appstreamcli validate --no-net %{buildroot}%{_metainfodir}/com.chrisdaggas.MonitorLayout.metainfo.xml
 
 %files
 %license LICENSE
@@ -76,10 +76,10 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/gr.hotwebdesign.Monit
 %{_bindir}/monitor-layout
 %{_bindir}/monitor-layout-revert-helper
 %{_bindir}/monitor-layout-ctl
-%{_datadir}/applications/gr.hotwebdesign.MonitorLayout.desktop
-%{_metainfodir}/gr.hotwebdesign.MonitorLayout.metainfo.xml
-%{_datadir}/icons/hicolor/scalable/apps/gr.hotwebdesign.MonitorLayout.svg
+%{_datadir}/applications/com.chrisdaggas.MonitorLayout.desktop
+%{_metainfodir}/com.chrisdaggas.MonitorLayout.metainfo.xml
+%{_datadir}/icons/hicolor/scalable/apps/com.chrisdaggas.MonitorLayout.svg
 
 %changelog
-* Sun Jul 19 2026 Christos A. Daggas <info@hotwebdesign.gr> - 0.1.0-1
+* Sun Jul 19 2026 Christos A. Daggas <christos@daggas.gr> - 0.1.0-1
 - Initial package

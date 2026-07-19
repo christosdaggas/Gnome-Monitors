@@ -1,3 +1,5 @@
+<img src="docs/img/icon.svg" width="96" align="right" alt="Monitor Layout icon"/>
+
 # Monitor Layout
 
 A native GNOME (Wayland) display layout manager with **partial mirroring** —

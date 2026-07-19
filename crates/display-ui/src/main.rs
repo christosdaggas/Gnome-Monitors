@@ -21,7 +21,7 @@ use tracing::{info, warn};
 use crate::canvas::Canvas;
 use crate::ui_state::{AppState, SharedState};
 
-pub const APP_ID: &str = "gr.hotwebdesign.MonitorLayout";
+pub const APP_ID: &str = "com.chrisdaggas.MonitorLayout";
 
 /// Widget context shared across the UI modules.
 pub struct UiCtx {
@@ -176,6 +176,37 @@ fn activate(app: &adw::Application) {
         .sync_create()
         .build();
     header.pack_end(&sidebar_toggle);
+
+    // Collapsing the sidebar shrinks the window from the right by the
+    // sidebar's width so the canvas keeps its size, instead of the canvas
+    // stretching to fill the freed space. (Skipped in narrow/overlay mode,
+    // where the sidebar floats over the canvas and takes no layout width.)
+    let last_sidebar_width = std::rc::Rc::new(std::cell::Cell::new(360));
+    split.connect_show_sidebar_notify({
+        let last_sidebar_width = std::rc::Rc::clone(&last_sidebar_width);
+        let panel_scroll = panel_scroll.clone();
+        move |split| {
+            let Some(window) = split.root().and_then(|r| r.downcast::<gtk::Window>().ok()) else {
+                return;
+            };
+            if split.is_collapsed() || !window.is_visible() {
+                return;
+            }
+            let height = window.height();
+            let width = window.width();
+            if split.shows_sidebar() {
+                let delta = last_sidebar_width.get();
+                window.set_default_size(width + delta, height);
+            } else {
+                let sidebar_width = panel_scroll.width();
+                if sidebar_width > 0 {
+                    last_sidebar_width.set(sidebar_width);
+                }
+                let delta = last_sidebar_width.get();
+                window.set_default_size((width - delta).max(360), height);
+            }
+        }
+    });
 
     let content = gtk::Box::new(gtk::Orientation::Vertical, 0);
     content.append(&banner);
