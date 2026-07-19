@@ -4,7 +4,11 @@ A native GNOME (Wayland) display layout manager with **partial mirroring** —
 built for setups where a KVM-over-IP console should mirror the main monitor
 while a second monitor stays extended.
 
-![Monitor Layout main window](docs/img/main-window.png)
+![Monitor Layout: a KVM mirrored with the main monitor as one group, second monitor extended](docs/img/main-window.png)
+
+*The canvas showing a mirror group: the KVM and the main LG panel as separate
+screens inside one “⧉ Mirrored” container, with the second LG extended beside
+it and the group's shared settings in the sidebar.*
 
 Monitor Layout talks directly to Mutter's `org.gnome.Mutter.DisplayConfig`
 D-Bus interface — the same mechanism GNOME Settings uses — and adds what the
@@ -18,17 +22,20 @@ rest remain independent.
   (arrow keys / Shift+arrows). Live validation explains anything Mutter
   would reject before you ever apply.
 * **Partial mirroring** — select a display, choose *Mirror With*, and the
-  two become one mirror group; place the group left/right/above/below the
-  remaining display, on any side. Mirror resolutions are computed from the
-  real common mode list (mixed refresh rates supported — e.g. an LG panel
-  at 59.997 Hz cloned with a KVM at 30 Hz).
+  two become one mirror group, drawn as separate screens inside one group
+  container; place the group left/right/above/below the remaining display,
+  on any side. Mirror resolutions are computed from the real common mode
+  list (mixed refresh rates supported — e.g. an LG panel at 59.997 Hz
+  cloned with a KVM at 30 Hz). Mirror edits are transactional: they either
+  produce a fully valid layout or change nothing.
 * **Per-display settings** — resolution (with aspect-ratio labels), refresh
   rate (VRR modes included), scaling incl. fractional, orientation, enable/
   disable, primary display. Only values the compositor actually advertises
   are offered.
-* **Identify** — numbered overlays on every screen via GNOME Shell's
-  official monitor labels; shown automatically while the window is focused.
-  Numbers match the canvas (1 = leftmost).
+* **Identify** — numbered overlays on every screen. GNOME Shell's official
+  monitor labels are used where permitted; since Shell restricts that API
+  to GNOME Settings, a built-in fallback shows a brief full-screen number
+  card per monitor instead. Numbers match the canvas (1 = leftmost).
 * **Profiles** — save named layouts (`KVM + Main Mirrored`, `Local Dual`,
   …). Profiles match monitors by **EDID identity** (vendor/product/serial),
   not connector names — they survive cable/port swaps; ambiguous or partial
@@ -139,9 +146,19 @@ color modes and RGB range are shown read-only in v0.1. Full list:
 | `docs/mutter-dbus-notes.md` | Verified `org.gnome.Mutter.DisplayConfig` reference (Mutter 50.2) |
 | `docs/architecture.md` | Crate/workspace design |
 | `docs/safety-and-rollback.md` | The apply/preview/rollback machinery |
-| `docs/testing.md` | Automated suite (87 tests) + manual matrix |
+| `docs/testing.md` | Automated suite (92 tests) + manual matrix |
 | `docs/known-limitations.md` | Honest list of what doesn't work (yet) |
+
+## Source
+
+Development happens at
+[github.com/christosdaggas/Gnome-Monitors](https://github.com/christosdaggas/Gnome-Monitors).
+CI (GitHub Actions) runs formatting, Clippy with denied warnings, the full
+test suite, release build, desktop/AppStream validation, and an RPM
+build + smoke install on Fedora 44.
 
 ## License
 
-GPL-3.0-or-later. See `LICENSE`.
+GPL-3.0-or-later (see `LICENSE`). © Christos A. Daggas.
+The application icon originates from SVG Repo; verify the individual
+icon's license terms before redistribution.

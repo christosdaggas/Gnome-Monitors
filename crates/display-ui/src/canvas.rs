@@ -436,7 +436,7 @@ impl Canvas {
             let (x, y, rw, rh) = self.to_widget(&rect);
             let is_selected = selected == Some(i);
 
-            // Card body.
+            // Card body (the group container for mirror groups).
             rounded_rect(cr, x, y, rw, rh, CARD_RADIUS);
             if is_selected {
                 cr.set_source_rgba(accent.0, accent.1, accent.2, 0.25);
@@ -453,22 +453,8 @@ impl Canvas {
             }
             let _ = cr.stroke();
 
-            // Labels.
-            cr.set_source_rgba(fg.0, fg.1, fg.2, 0.95);
-            let names: Vec<String> = logical
-                .monitors
-                .iter()
-                .map(|a| {
-                    let mut name = self.state.name_of(&a.connector);
-                    if self.state.is_kvm(&a.connector) {
-                        name.push_str("  (KVM)");
-                    }
-                    name
-                })
-                .collect();
             let (mode_w, mode_h) = logical.mode_size(&state.monitors).unwrap_or((0, 0));
-            let mut lines = vec![format!("{}", numbers.get(i).copied().unwrap_or(i + 1))];
-            lines.extend(names);
+            let number = numbers.get(i).copied().unwrap_or(i + 1);
             let mode_line = format!(
                 "{}  ·  {} %",
                 display_core::mode::format_resolution(mode_w, mode_h),
@@ -478,24 +464,82 @@ impl Canvas {
                     pct
                 }
             );
-            lines.push(mode_line);
-            let mut badges = Vec::new();
-            if logical.primary {
-                badges.push("★ Primary");
-            }
-            if logical.is_mirror_group() {
-                badges.push("⧉ Mirrored");
-            }
-            if !badges.is_empty() {
-                lines.push(badges.join("   "));
-            }
 
-            let layout_text = self.widget.create_pango_layout(Some(&lines.join("\n")));
-            layout_text.set_width((rw.max(10.0) as i32 - 16) * gtk::pango::SCALE);
-            layout_text.set_ellipsize(gtk::pango::EllipsizeMode::End);
-            let (_, text_h) = layout_text.pixel_size();
-            cr.move_to(x + 10.0, y + (rh - f64::from(text_h)).max(0.0) / 2.0);
-            pangocairo::functions::show_layout(cr, &layout_text);
+            cr.set_source_rgba(fg.0, fg.1, fg.2, 0.95);
+            if logical.is_mirror_group() {
+                // Header: number, mirror badge, shared mode; below it each
+                // member gets its own separate mini-monitor card, side by
+                // side inside the group container.
+                let mut header = format!("{number}   ⧉ Mirrored  ·  {mode_line}");
+                if logical.primary {
+                    header.push_str("   ★ Primary");
+                }
+                let header_text = self.widget.create_pango_layout(Some(&header));
+                header_text.set_width((rw.max(10.0) as i32 - 20) * gtk::pango::SCALE);
+                header_text.set_ellipsize(gtk::pango::EllipsizeMode::End);
+                let (_, header_h) = header_text.pixel_size();
+                cr.move_to(x + 10.0, y + 8.0);
+                pangocairo::functions::show_layout(cr, &header_text);
+
+                let pad = 10.0;
+                let gap = 8.0;
+                let top = y + 8.0 + f64::from(header_h) + 6.0;
+                let inner_h = (y + rh - pad - top).max(12.0);
+                #[allow(clippy::cast_precision_loss)]
+                let n = logical.monitors.len() as f64;
+                let col_w = ((rw - 2.0 * pad - gap * (n - 1.0)) / n).max(24.0);
+                for (k, assignment) in logical.monitors.iter().enumerate() {
+                    #[allow(clippy::cast_precision_loss)]
+                    let cx = x + pad + (col_w + gap) * k as f64;
+                    rounded_rect(cr, cx, top, col_w, inner_h, 6.0);
+                    cr.set_source_rgba(fg.0, fg.1, fg.2, 0.10);
+                    let _ = cr.fill_preserve();
+                    cr.set_source_rgba(fg.0, fg.1, fg.2, 0.45);
+                    cr.set_line_width(1.0);
+                    let _ = cr.stroke();
+
+                    let mut name = self.state.name_of(&assignment.connector);
+                    if self.state.is_kvm(&assignment.connector) {
+                        name.push_str("\n(KVM)");
+                    }
+                    let member_text = self.widget.create_pango_layout(Some(&name));
+                    member_text.set_width((col_w.max(10.0) as i32 - 10) * gtk::pango::SCALE);
+                    member_text.set_ellipsize(gtk::pango::EllipsizeMode::End);
+                    member_text.set_alignment(gtk::pango::Alignment::Center);
+                    let (_, member_h) = member_text.pixel_size();
+                    cr.set_source_rgba(fg.0, fg.1, fg.2, 0.95);
+                    cr.move_to(
+                        cx + 5.0,
+                        top + (inner_h - f64::from(member_h)).max(0.0) / 2.0,
+                    );
+                    pangocairo::functions::show_layout(cr, &member_text);
+                }
+            } else {
+                let mut lines = vec![number.to_string()];
+                let mut name = logical
+                    .monitors
+                    .first()
+                    .map(|a| self.state.name_of(&a.connector))
+                    .unwrap_or_default();
+                if logical
+                    .monitors
+                    .first()
+                    .is_some_and(|a| self.state.is_kvm(&a.connector))
+                {
+                    name.push_str("  (KVM)");
+                }
+                lines.push(name);
+                lines.push(mode_line);
+                if logical.primary {
+                    lines.push("★ Primary".to_owned());
+                }
+                let layout_text = self.widget.create_pango_layout(Some(&lines.join("\n")));
+                layout_text.set_width((rw.max(10.0) as i32 - 16) * gtk::pango::SCALE);
+                layout_text.set_ellipsize(gtk::pango::EllipsizeMode::End);
+                let (_, text_h) = layout_text.pixel_size();
+                cr.move_to(x + 10.0, y + (rh - f64::from(text_h)).max(0.0) / 2.0);
+                pangocairo::functions::show_layout(cr, &layout_text);
+            }
         }
 
         // Snap guides while dragging.

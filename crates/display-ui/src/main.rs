@@ -290,6 +290,47 @@ fn activate(app: &adw::Application) {
                 if std::env::var_os("MONITOR_LAYOUT_IDENTIFY_ON_START").is_some() {
                     identify::show(&ctx2).await;
                 }
+                // Demo hook: build a mirror group in the EDITOR ONLY (never
+                // applied) — used for screenshots and visual verification.
+                if std::env::var_os("MONITOR_LAYOUT_DEMO_MIRROR").is_some() {
+                    let merged = {
+                        let current = ctx2.state.current.borrow();
+                        let mut edited = ctx2.state.edited.borrow_mut();
+                        if let (Some(state), Some(layout)) = (current.as_ref(), edited.as_mut()) {
+                            let kvm = state
+                                .monitors
+                                .iter()
+                                .find(|m| ctx2.state.prefs.borrow().is_kvm(m))
+                                .map(|m| m.connector().to_owned());
+                            let anchor = state
+                                .layout
+                                .primary()
+                                .and_then(|l| l.monitors.first())
+                                .map(|a| a.connector.clone());
+                            if let (Some(kvm), Some(anchor)) = (kvm, anchor) {
+                                display_core::layout_ops::merge_into_mirror(
+                                    state, layout, &anchor, &kvm,
+                                )
+                                .is_ok()
+                                .then_some(anchor)
+                            } else {
+                                None
+                            }
+                        } else {
+                            None
+                        }
+                    };
+                    if let Some(anchor) = merged {
+                        let index = ctx2
+                            .state
+                            .edited
+                            .borrow()
+                            .as_ref()
+                            .and_then(|l| l.group_of(&anchor).map(|(i, _)| i));
+                        ctx2.state.selected.set(index);
+                        ctx2.after_structural_edit();
+                    }
+                }
                 listen(&ctx2, backend).await;
             }
             Err(e) => {
@@ -620,7 +661,7 @@ fn about_action(app: &adw::Application) {
                 .application_name("Monitor Layout")
                 .application_icon(APP_ID)
                 .version(env!("CARGO_PKG_VERSION"))
-                .developer_name("Christos")
+                .developer_name("Christos A. Daggas")
                 .license_type(gtk::License::Gpl30)
                 .comments(
                     "Visual display layout manager for GNOME on Wayland, with partial \

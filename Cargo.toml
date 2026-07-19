@@ -12,8 +12,9 @@ members = [
 version = "0.1.0"
 edition = "2024"
 license = "GPL-3.0-or-later"
-authors = ["Christos <info@hotwebdesign.gr>"]
+authors = ["Christos A. Daggas <info@hotwebdesign.gr>"]
 rust-version = "1.92"
+repository = "https://github.com/christosdaggas/Gnome-Monitors"
 
 [workspace.dependencies]
 display-core = { path = "crates/display-core" }

@@ -26,9 +26,10 @@
   </description>
   <launchable type="desktop-id">gr.hotwebdesign.MonitorLayout.desktop</launchable>
   <developer id="gr.hotwebdesign">
-    <name>Christos</name>
+    <name>Christos A. Daggas</name>
   </developer>
   <url type="homepage">https://hotwebdesign.gr/</url>
+  <url type="vcs-browser">https://github.com/christosdaggas/Gnome-Monitors</url>
   <content_rating type="oars-1.1"/>
   <supports>
     <control>pointing</control>

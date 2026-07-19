@@ -68,7 +68,7 @@ install -Dm644 data/icons/hicolor/scalable/apps/gr.hotwebdesign.MonitorLayout.sv
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/gr.hotwebdesign.MonitorLayout.desktop
-appstreamcli validate %{buildroot}%{_metainfodir}/gr.hotwebdesign.MonitorLayout.metainfo.xml
+appstreamcli validate --no-net %{buildroot}%{_metainfodir}/gr.hotwebdesign.MonitorLayout.metainfo.xml
 
 %files
 %license LICENSE
@@ -81,5 +81,5 @@ appstreamcli validate %{buildroot}%{_metainfodir}/gr.hotwebdesign.MonitorLayout.
 %{_datadir}/icons/hicolor/scalable/apps/gr.hotwebdesign.MonitorLayout.svg
 
 %changelog
-* Sun Jul 19 2026 Christos <info@hotwebdesign.gr> - 0.1.0-1
+* Sun Jul 19 2026 Christos A. Daggas <info@hotwebdesign.gr> - 0.1.0-1
 - Initial package
