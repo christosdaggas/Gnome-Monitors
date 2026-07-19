@@ -162,16 +162,11 @@ fn activate(app: &adw::Application) {
     split.set_content(Some(&canvas.widget));
     split.set_sidebar(Some(&panel_scroll));
 
-    // Narrow windows collapse the sidebar into an overlay, with a toggle in
-    // the header to open it.
+    // A header button always toggles the display-settings sidebar (it shows
+    // as an overlay when the window is narrow, side-by-side otherwise).
     let sidebar_toggle = gtk::ToggleButton::builder()
-        .icon_name("sidebar-show-symbolic")
-        .tooltip_text("Show the display settings sidebar")
-        .visible(false)
-        .build();
-    split
-        .bind_property("collapsed", &sidebar_toggle, "visible")
-        .sync_create()
+        .icon_name("sidebar-show-right-symbolic")
+        .tooltip_text("Show or hide the display settings sidebar")
         .build();
     // Bind FROM the split view so the initial sync copies the split's
     // default (sidebar shown) onto the toggle — not the other way round.
