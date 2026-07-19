@@ -178,32 +178,36 @@ fn activate(app: &adw::Application) {
     header.pack_end(&sidebar_toggle);
 
     // Collapsing the sidebar shrinks the window from the right by the
-    // sidebar's width so the canvas keeps its size, instead of the canvas
-    // stretching to fill the freed space. (Skipped in narrow/overlay mode,
-    // where the sidebar floats over the canvas and takes no layout width.)
-    let last_sidebar_width = std::rc::Rc::new(std::cell::Cell::new(360));
+    // sidebar's width so the canvas keeps its size; reopening restores the
+    // exact previous width. We remember the absolute expanded width rather
+    // than doing incremental +/- arithmetic (which reads stale widths during
+    // the async resize). (Skipped in narrow/overlay mode, where the sidebar
+    // floats over the canvas and takes no layout width.)
+    let expanded_width = std::rc::Rc::new(std::cell::Cell::new(-1_i32));
     split.connect_show_sidebar_notify({
-        let last_sidebar_width = std::rc::Rc::clone(&last_sidebar_width);
+        let expanded_width = std::rc::Rc::clone(&expanded_width);
         let panel_scroll = panel_scroll.clone();
         move |split| {
             let Some(window) = split.root().and_then(|r| r.downcast::<gtk::Window>().ok()) else {
                 return;
             };
-            if split.is_collapsed() || !window.is_visible() {
+            if split.is_collapsed() || !window.is_mapped() {
                 return;
             }
             let height = window.height();
-            let width = window.width();
             if split.shows_sidebar() {
-                let delta = last_sidebar_width.get();
-                window.set_default_size(width + delta, height);
-            } else {
-                let sidebar_width = panel_scroll.width();
-                if sidebar_width > 0 {
-                    last_sidebar_width.set(sidebar_width);
+                // Reopen: restore the width we had before collapsing.
+                let target = expanded_width.get();
+                if target > 0 {
+                    window.set_default_size(target, height);
                 }
-                let delta = last_sidebar_width.get();
-                window.set_default_size((width - delta).max(360), height);
+            } else {
+                // Collapse: remember the current (expanded) width, then
+                // shrink by the sidebar's width.
+                let current = window.width();
+                expanded_width.set(current);
+                let sidebar_width = panel_scroll.width().max(320);
+                window.set_default_size((current - sidebar_width).max(400), height);
             }
         }
     });
