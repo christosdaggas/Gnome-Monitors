@@ -1,0 +1,4 @@
+/target
+/packaging/*.rpm
+/packaging/vendor
+*.log

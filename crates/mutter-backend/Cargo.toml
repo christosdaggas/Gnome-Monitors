@@ -1,0 +1,26 @@
+[package]
+name = "mutter-backend"
+description = "Typed org.gnome.Mutter.DisplayConfig backend for display-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+display-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+zbus = { workspace = true }
+zvariant = { workspace = true }
+futures-util = { workspace = true }
+async-channel = "2"
+
+[dev-dependencies]
+futures-lite = { workspace = true }
+zbus = { workspace = true, features = ["p2p"] }
+
+[lints]
+workspace = true

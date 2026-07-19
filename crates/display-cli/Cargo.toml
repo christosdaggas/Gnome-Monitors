@@ -1,0 +1,28 @@
+[package]
+name = "display-cli"
+description = "Diagnostic and proof-of-concept CLI for Monitor Layout"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "monitor-layout-ctl"
+path = "src/main.rs"
+
+[dependencies]
+display-core = { workspace = true }
+mutter-backend = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+futures-util = { workspace = true }
+futures-lite = { workspace = true }
+async-io = "2"
+zbus = { workspace = true }
+
+[lints]
+workspace = true

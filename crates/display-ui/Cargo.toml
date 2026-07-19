@@ -1,0 +1,28 @@
+[package]
+name = "display-ui"
+description = "Monitor Layout — a GNOME display layout manager"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "monitor-layout"
+path = "src/main.rs"
+
+[dependencies]
+display-core = { workspace = true }
+mutter-backend = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+futures-util = { workspace = true }
+gtk = { workspace = true }
+adw = { workspace = true }
+pangocairo = "0.22"
+
+[lints]
+workspace = true

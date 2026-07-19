@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - name: Install toolchain and platform libraries
+        run: |
+          dnf install -y rust cargo clippy rustfmt gcc gtk4-devel \
+            libadwaita-devel glib2-devel desktop-file-utils appstream git
+      - uses: actions/checkout@v4
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Clippy (deny warnings)
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - name: Tests (unit, fixtures, fake D-Bus service, watchdog process)
+        run: cargo test --workspace --all-features
+      - name: Release build
+        run: cargo build --release --locked --workspace
+      - name: Validate desktop file and AppStream metadata
+        run: |
+          desktop-file-validate data/desktop/gr.hotwebdesign.MonitorLayout.desktop
+          appstreamcli validate data/metainfo/gr.hotwebdesign.MonitorLayout.metainfo.xml
+
+  rpm:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    needs: checks
+    steps:
+      - name: Install RPM build tooling
+        run: |
+          dnf install -y rust cargo gcc gtk4-devel libadwaita-devel \
+            glib2-devel desktop-file-utils appstream rpm-build git tar xz
+      - uses: actions/checkout@v4
+      - name: Build and smoke-install the RPM
+        run: |
+          ./packaging/build-rpm.sh
+          dnf install -y ./dist/rpm/monitor-layout-*.x86_64.rpm
+          monitor-layout-ctl --help
