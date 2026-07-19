@@ -25,8 +25,12 @@ Ideal for KVM setups where a remote console should mirror the main monitor.
 
 ## Install
 
+Download the RPM from the
+[latest release](https://github.com/christosdaggas/Gnome-Monitors/releases/latest),
+then:
+
 ```bash
-sudo dnf install ./dist/rpm/monitor-layout-0.1.0-1.fc44.x86_64.rpm
+sudo dnf install ./monitor-layout-1.0.0-1.fc44.x86_64.rpm
 ```
 
 Or build it yourself:

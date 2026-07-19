@@ -1,4 +1,5 @@
 /target
+/dist
 /packaging/*.rpm
 /packaging/vendor
 *.log

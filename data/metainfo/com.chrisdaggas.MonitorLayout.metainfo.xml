@@ -43,6 +43,11 @@
     <category>HardwareSettings</category>
   </categories>
   <releases>
+    <release version="1.0.0" date="2026-07-20">
+      <description>
+        <p>First stable release. Partial mirroring, profiles, safe apply and rollback, and hardening from external review.</p>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-07-19">
       <description>
         <p>Initial release: visual layout editor, partial mirroring, profiles, safe apply and rollback.</p>

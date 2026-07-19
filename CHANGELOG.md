@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0 — 2026-07-20
+
+First stable release. Includes all 0.1.0 functionality plus hardening from
+an external review: fail-closed previews, a rollback watchdog that never
+overwrites newer configurations, transactional mirror edits, profile
+protection for newly connected monitors, and extra validation. Application
+icon and window/sidebar behaviour polished.
+
 ## 0.1.0 — 2026-07-19
 
 Initial release. Application ID `com.chrisdaggas.MonitorLayout`; original

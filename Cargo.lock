@@ -337,7 +337,7 @@ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
 
 [[package]]
 name = "display-cli"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-io",
@@ -354,7 +354,7 @@ dependencies = [
 
 [[package]]
 name = "display-core"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -363,7 +363,7 @@ dependencies = [
 
 [[package]]
 name = "display-revert-helper"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "display-core",
@@ -377,7 +377,7 @@ dependencies = [
 
 [[package]]
 name = "display-ui"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "display-core",
@@ -940,7 +940,7 @@ dependencies = [
 
 [[package]]
 name = "mutter-backend"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "async-channel",
  "display-core",

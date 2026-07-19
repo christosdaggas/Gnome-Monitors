@@ -4,7 +4,7 @@
 #           desktop-file-utils, libappstream-glib
 set -euo pipefail
 
-VERSION=0.1.0
+VERSION=1.0.0
 NAME=monitor-layout
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TOP="${ROOT}/target/rpmbuild"

@@ -9,7 +9,7 @@
 # polkit rules are needed and the app never requires root.
 
 Name:           monitor-layout
-Version:        0.1.0
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Visual display layout manager for GNOME with partial mirroring
 License:        GPL-3.0-or-later
@@ -81,5 +81,7 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/com.chrisdaggas.Monit
 %{_datadir}/icons/hicolor/scalable/apps/com.chrisdaggas.MonitorLayout.svg
 
 %changelog
+* Mon Jul 20 2026 Christos A. Daggas <christos@daggas.gr> - 1.0.0-1
+- First stable release
 * Sun Jul 19 2026 Christos A. Daggas <christos@daggas.gr> - 0.1.0-1
 - Initial package
